@@ -25,14 +25,12 @@
   },
   "author": {
     "name": "horis",
-    "email": "",
-    "url": ""
+    "email": "horis233@gmail.com"
   },
   "maintainers": [
     {
       "name": "horis",
-      "email": "",
-      "url": ""
+      "email": "horis233@gmail.com"
     }
   ],
   "strapi": {
