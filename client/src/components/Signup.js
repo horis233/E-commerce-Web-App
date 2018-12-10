@@ -13,6 +13,20 @@ class Signup extends React.Component {
     this.setState({ [event.target.name]: value });
   };
 
+  handleSubmit = event => {
+    event.preventDefault();
+
+    if (this.isFormEmpty(this.state)) {
+      //this.showToast("Fill in all fields");
+      return;
+    }
+    console.log("submitted");
+  };
+
+  isFormEmpty = ({ username, email, password }) => {
+    return !username || !email || !password;
+  };
+
   render() {
     return (
       <Container>
