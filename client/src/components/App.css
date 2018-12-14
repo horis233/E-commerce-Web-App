@@ -1,6 +1,7 @@
 html,
 body {
   margin: 0;
+
   background-color: #f6f9fc;
 }
 
@@ -12,4 +13,74 @@ a:visited {
 
 .active {
   font-style: italic;
+}
+
+form input {
+  margin-bottom: 0.5em;
+}
+
+#stripe__button {
+  display: inline-block;
+
+  height: 40px;
+  margin-top: 10px;
+  padding: 0 14px;
+
+  transition: all 150ms ease;
+  white-space: nowrap;
+  text-decoration: none;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+
+  color: #fff;
+  border: 0;
+  border-radius: 4px;
+  outline: 0;
+  background-color: #6772e5;
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 40px;
+}
+
+#stripe__button:hover {
+  cursor: pointer;
+  transform: translateY(-1px);
+
+  color: #fff;
+  background-color: #7795f8;
+  box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+}
+
+.StripeElement {
+  display: block;
+
+  max-width: 500px;
+  margin: 10px 0 20px 0;
+  padding: 10px 14px;
+
+  border: 0;
+  border-radius: 4px;
+  outline: 0;
+  background: white;
+  box-shadow: rgba(50, 50, 93, 0.14902) 0px 1px 3px,
+    rgba(0, 0, 0, 0.0196078) 0px 1px 0px;
+
+  font-family: monospace;
+  font-size: 1em;
+}
+
+.StripeElement--focus {
+  transition: all 150ms ease;
+
+  box-shadow: rgba(50, 50, 93, 0.109804) 0px 4px 6px,
+    rgba(0, 0, 0, 0.0784314) 0px 1px 3px;
+}
+
+/* Media Queries */
+@media (max-width: 400px) {
+  .main-title {
+    display: none;
+  }
 }
