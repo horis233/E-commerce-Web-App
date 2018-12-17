@@ -1,5 +1,7 @@
 'use strict';
-const stripe = require('stripe')("pk_test_HOhtpsuok5rTKqf11QYBmeCH");
+
+const stripe = require('stripe')('sk_test_iPGn4bcZCoCIpQte0DCv5Fm8');
+
 /**
  * Orders.js controller
  *
@@ -57,7 +59,7 @@ module.exports = {
 		// Send charge to Stripe
 		const charge = await stripe.charges.create({
 			amount: amount * 100,
-			currency: 'cad',
+			currency: 'usd',
 			description: `Order ${new Date(Date.now())} - User ${ctx.state.user._id}`,
 			source: token
 		});
