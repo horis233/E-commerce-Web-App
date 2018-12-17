@@ -305,7 +305,7 @@ type Orders {
   postalCode: String!
   city: String!
   brews: JSON!
-  amount: Float!
+  amount: Int!
 }
 
 type OrdersAggregator {
@@ -329,7 +329,7 @@ type OrdersConnectionAddress {
 }
 
 type OrdersConnectionAmount {
-  key: Float
+  key: Int
   connection: OrdersConnection
 }
 
@@ -374,7 +374,7 @@ input OrdersInput {
   postalCode: String!
   city: String!
   brews: JSON!
-  amount: Float!
+  amount: Int!
 }
 
 type Query {
