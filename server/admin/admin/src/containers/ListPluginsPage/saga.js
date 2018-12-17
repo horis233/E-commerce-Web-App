@@ -1,9 +1,10 @@
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { get } from 'lodash';
-import { all, fork, call, put, select, takeLatest, take, cancel } from 'redux-saga/effects';
+import { fork, call, put, select, takeLatest, take, cancel } from 'redux-saga/effects';
 import { pluginDeleted } from 'containers/App/actions';
 import auth from 'utils/auth';
 import request from 'utils/request';
+
 import { selectLocale } from '../LanguageProvider/selectors';
 import { deletePluginSucceeded, getAppCurrentEnvSucceeded, getPluginsSucceeded } from './actions';
 import { GET_PLUGINS, ON_DELETE_PLUGIN_CONFIRM } from './constants';
@@ -35,10 +36,10 @@ export function* deletePlugin() {
 export function* pluginsGet() {
   try {
     // Fetch plugins.
-    const response = yield all([
+    const response = yield [
       call(request, '/admin/plugins', { method: 'GET' }),
       call(request, '/admin/currentEnvironment', { method: 'GET' }),
-    ]);
+    ];
     const locale = yield select(selectLocale());
 
     const opts = {

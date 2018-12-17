@@ -1,17 +1,4 @@
-import {
-  forEach,
-  isObject,
-  isArray,
-  map,
-  mapKeys,
-  includes,
-  reject,
-  isEmpty,
-  findIndex,
-  isUndefined,
-  isBoolean,
-  isNumber,
-} from 'lodash';
+import { forEach, isObject, isArray, map, mapKeys, includes, reject, isEmpty, findIndex, isUndefined } from 'lodash';
 
 /* eslint-disable consistent-return */
 export function getValidationsFromForm(form, formValidations) {
@@ -101,7 +88,7 @@ function validate(value, validations) {
       case 'type':
         if (validationValue === 'json') {
           try {
-            if (isObject(value) || isBoolean(value) || isNumber(value) || isArray(value)) {
+            if (isObject(value)) {
               value = JSON.parse(JSON.stringify(value));
             } else {
               errors.push({ id: 'content-manager.error.validation.json' });

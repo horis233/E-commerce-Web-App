@@ -15,8 +15,10 @@ defineMessages(messages);
 function LeftMenuFooter({ version }) { // eslint-disable-line react/prefer-stateless-function
   return (
     <div className={styles.leftMenuFooter}>
-      <FormattedMessage {...messages.poweredBy} />
-      <a href={`https://github.com/strapi/strapi/releases/tag/v${version}`} target="_blank">v{version}</a>
+      <div>
+        <FormattedMessage {...messages.poweredBy} />
+        <a href="https://strapi.io" target="_blank">v{version}</a>
+      </div>
     </div>
   );
 }

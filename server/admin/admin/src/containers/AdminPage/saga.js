@@ -1,38 +1,42 @@
-import { all, fork, call, put, select, takeLatest } from 'redux-saga/effects';
-import auth from 'utils/auth';
+import { fork, call, put, takeLatest } from 'redux-saga/effects';
 import request from 'utils/request';
-import { makeSelectAppPlugins } from 'containers/App/selectors';
+
 import {
-  getAdminDataSucceeded,
+  getCurrEnvSucceeded,
+  getGaStatusSucceeded,
+  getLayoutSucceeded,
+  getStrapiVersionSucceeded,
 } from './actions';
-import { GET_ADMIN_DATA } from './constants';
+import { GET_GA_STATUS, GET_LAYOUT } from './constants';
 
-function* getData() {
+function* getGaStatus() {
   try {
-    const appPlugins = yield select(makeSelectAppPlugins());
-    const hasUserPlugin = appPlugins.indexOf('users-permissions') !== -1;
-
-    if (hasUserPlugin && auth.getToken() !== null) {
-      yield call(request, `${strapi.backendURL}/users/me`, { method: 'GET' });
-    }
-
-    const [{ allowGa }, { strapiVersion }, { currentEnvironment }, { layout }] = yield all([
+    const [{ allowGa }, { strapiVersion }, { currentEnvironment }] = yield [
       call(request, '/admin/gaConfig', { method: 'GET' }),
       call(request, '/admin/strapiVersion', { method: 'GET' }),
       call(request, '/admin/currentEnvironment', { method: 'GET' }),
-      call(request, '/admin/layout', { method: 'GET' }),
-    ]);
-    yield put(getAdminDataSucceeded({ allowGa, strapiVersion, currentEnvironment, layout }));
+    ];
 
+    yield put(getCurrEnvSucceeded(currentEnvironment));
+    yield put(getGaStatusSucceeded(allowGa));
+    yield put(getStrapiVersionSucceeded(strapiVersion));
   } catch(err) {
-    console.log(err); // eslint-disable-line no-console
+    strapi.notification.error('notification.error');
+  }
+}
+
+function* getLayout() {
+  try {
+    const layout = yield call(request, '/admin/layout', { method: 'GET' });
+    yield put(getLayoutSucceeded(layout));
+  } catch(err) {
+    strapi.notification.error('notification.error.layout');
   }
 }
 
 function* defaultSaga() {
-  yield all([
-    fork(takeLatest, GET_ADMIN_DATA, getData),
-  ]);
+  yield fork(takeLatest, GET_GA_STATUS, getGaStatus);
+  yield fork(takeLatest, GET_LAYOUT, getLayout);
 }
 
 export default defaultSaga;

@@ -7,7 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { isEmpty, isNull, isObject, toLower, toString } from 'lodash';
+import { isEmpty, isObject, toString } from 'lodash';
 import cn from 'classnames';
 
 import CustomInputCheckbox from 'components/CustomInputCheckbox';
@@ -31,17 +31,17 @@ class TableRow extends React.Component {
    * @returns {*}
    */
   getDisplayedValue(type, value, name) {
-    switch (toLower(type)) {
+    switch (type.toLowerCase()) {
       case 'string':
       case 'text':
       case 'email':
       case 'enumeration':
-        return (value && !isEmpty(toString(value))) || name === 'id' ? toString(value) : '-';
+        return (value && !isEmpty(value.toString())) || name === 'id' ? value.toString() : '-';
       case 'float':
       case 'integer':
       case 'biginteger':
       case 'decimal':
-        return !isNull(value) ? toString(value) : '-';
+        return value && !isEmpty(value.toString()) ? value.toString() : '-';
       case 'boolean':
         return value !== null ? toString(value) : '-';
       case 'date':
@@ -74,7 +74,7 @@ class TableRow extends React.Component {
     <td key='action' className={styles.actions}>
       <IcoContainer
         icons={[
-          { icoType: 'pencil', onClick: this.handleClick },
+          { icoType: 'pencil', onClick: () => this.handleClick(this.props.destination) },
           { id: this.props.record.id, icoType: 'trash', onClick: this.props.onDelete },
         ]}
       />
@@ -119,7 +119,7 @@ class TableRow extends React.Component {
 
   render() {
     return (
-      <tr className={cn(styles.tableRow, this.props.enableBulkActions && styles.tableRowWithBulk)} onClick={this.handleClick}>
+      <tr className={cn(styles.tableRow, this.props.enableBulkActions && styles.tableRowWithBulk)} onClick={() => this.handleClick(this.props.destination)}>
         {this.renderCells()}
       </tr>
     );
@@ -128,6 +128,11 @@ class TableRow extends React.Component {
 
 TableRow.contextTypes = {
   router: PropTypes.object.isRequired,
+};
+
+TableRow.defaultProps = {
+  enableBulkActions: true,
+  value: false,
 };
 
 TableRow.propTypes = {
@@ -142,9 +147,7 @@ TableRow.propTypes = {
 };
 
 TableRow.defaultProps = {
-  enableBulkActions: true,
   onDelete: () => {},
-  value: false,
 };
 
 export default TableRow;

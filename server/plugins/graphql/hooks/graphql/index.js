@@ -35,7 +35,7 @@ module.exports = strapi => {
         // Load root configurations.
         new Promise((resolve, reject) => {
           glob(
-            './config/*.graphql?(.js)',
+            './config/*.graphql',
             {
               cwd: strapi.config.appPath,
             },
@@ -54,7 +54,7 @@ module.exports = strapi => {
         // Load APIs configurations.
         new Promise((resolve, reject) => {
           glob(
-            './api/*/config/*.graphql?(.js)',
+            './api/*/config/*.graphql',
             {
               cwd: strapi.config.appPath,
             },
@@ -73,7 +73,7 @@ module.exports = strapi => {
         // Load plugins configurations.
         new Promise((resolve, reject) => {
           glob(
-            './plugins/*/config/*.graphql?(.js)',
+            './plugins/*/config/*.graphql',
             {
               cwd: strapi.config.appPath,
             },

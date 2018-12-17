@@ -1,19 +1,16 @@
-import { get, includes, isArray, omit, set } from 'lodash';
-import { call, fork, put, select, takeLatest } from 'redux-saga/effects';
+import { get, includes, isArray, set, omit } from 'lodash';
+import { call, fork, takeLatest, put, select } from 'redux-saga/effects';
 import auth from 'utils/auth';
 import request from 'utils/request';
 
+import { makeSelectFormType, makeSelectModifiedData } from './selectors';
 import { hideLoginErrorsInput, submitError, submitSucceeded } from './actions';
 import { SUBMIT } from './constants';
-import { makeSelectFormType, makeSelectModifiedData } from './selectors';
 
 export function* submitForm(action) {
-
   try {
-    const body = yield select(makeSelectModifiedData());
     const formType = yield select(makeSelectFormType());
-    const isRegister = formType === 'register';
-
+    const body = yield select(makeSelectModifiedData());
     let requestURL;
 
     switch (formType) {
@@ -36,13 +33,12 @@ export function* submitForm(action) {
 
     const response = yield call(request, requestURL, { method: 'POST', body: omit(body, 'news') });
 
-    if(get(response, 'user.role.name', '') === 'Administrator' || isRegister){
-      
+    if (response.jwt) {
       yield call(auth.setToken, response.jwt, body.rememberMe);
       yield call(auth.setUserInfo, response.user, body.rememberMe);
     }
 
-    if (isRegister) {
+    if (formType === 'register') {
       action.context.updatePlugin('users-permissions', 'hasAdminUser', true);
 
       if (body.news) {
@@ -86,11 +82,7 @@ export function* submitForm(action) {
           yield put(hideLoginErrorsInput(true));
           break;
         case 'reset-password':
-          if (errors[0].id === 'users-permissions.Auth.form.error.code.provide') {
-            strapi.notification.error(errors[0].id);
-          } else {
-            formErrors = [{ name: 'password', errors }];
-          }
+          formErrors = [{ name: 'password', errors: [{ id: 'users-permissions.Auth.form.error.password.matching' }] }];
           break;
         case 'register': {
           const target = includes(get(errors, ['0', 'id']), 'username') ? 'username' : 'email';

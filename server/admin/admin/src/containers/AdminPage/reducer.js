@@ -7,7 +7,10 @@
 import { fromJS, Map } from 'immutable';
 
 import {
-  GET_ADMIN_DATA_SUCCEEDED,
+  GET_CURR_ENV_SUCCEEDED,
+  GET_GA_STATUS_SUCCEEDED,
+  GET_LAYOUT_SUCCEEDED,
+  GET_STRAPI_VERSION_SUCCEEDED,
 } from './constants';
 
 const initialState = fromJS({
@@ -20,13 +23,16 @@ const initialState = fromJS({
 
 function adminPageReducer(state = initialState, action) {
   switch (action.type) {
-    case GET_ADMIN_DATA_SUCCEEDED:
+    case GET_CURR_ENV_SUCCEEDED:
       return state
-        .update('allowGa', () => action.data.allowGa)
-        .update('currentEnvironment', () => action.data.currentEnvironment)
-        .update('layout', () => Map(action.data.layout))
-        .update('strapiVersion', () => action.data.strapiVersion)
-        .update('isLoading', () => false);
+        .update('isLoading', () => false)
+        .update('currentEnvironment', () => action.currentEnvironment);
+    case GET_GA_STATUS_SUCCEEDED:
+      return state.update('allowGa', () => action.allowGa);
+    case GET_LAYOUT_SUCCEEDED:
+      return state.update('layout', () => Map(action.layout));
+    case GET_STRAPI_VERSION_SUCCEEDED:
+      return state.update('strapiVersion', () => action.strapiVersion);
     default:
       return state;
   }

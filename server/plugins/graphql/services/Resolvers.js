@@ -65,11 +65,11 @@ module.exports = {
         });
 
         Object.assign(acc.resolver[globalId], {
-          createdAt: (obj) => {
+          createdAt: (obj, options, context) => {
             // eslint-disable-line no-unused-vars
             return obj.createdAt || obj.created_at;
           },
-          updatedAt: (obj) => {
+          updatedAt: (obj, options, context) => {
             // eslint-disable-line no-unused-vars
             return obj.updatedAt || obj.updated_at;
           },
@@ -154,7 +154,7 @@ module.exports = {
       Object.keys(queries).forEach(type => {
         // The query cannot be built.
         if (_.isError(queries[type])) {
-          strapi.log.error(queries[type]);
+          console.error(queries[type]);
           strapi.stop();
         }
 
@@ -303,7 +303,7 @@ module.exports = {
           case 'manyMorphToMany':
           case 'manyToManyMorph':
             return _.merge(acc.resolver[globalId], {
-              [association.alias]: async (obj) => {
+              [association.alias]: async (obj, options, context) => {
                 // eslint-disable-line no-unused-vars
                 const [withRelated, withoutRelated] = await Promise.all([
                   resolvers.fetch(
@@ -362,7 +362,7 @@ module.exports = {
         }
 
         _.merge(acc.resolver[globalId], {
-          [association.alias]: async (obj, options) => {
+          [association.alias]: async (obj, options, context) => {
             // eslint-disable-line no-unused-vars
             // Construct parameters object to retrieve the correct related entries.
             const params = {
@@ -399,19 +399,21 @@ module.exports = {
 
               switch (association.nature) {
                 case 'manyToMany': {
-                  const arrayOfIds = (obj[association.alias] || []).map(
-                    related => {
-                      return related[ref.primaryKey] || related;
-                    },
-                  );
+                  if (association.dominant) {
+                    const arrayOfIds = (obj[association.alias] || []).map(
+                      related => {
+                        return related[ref.primaryKey] || related;
+                      },
+                    );
 
-                  // Where.
-                  queryOpts.query = strapi.utils.models.convertParams(name, {
-                    // Construct the "where" query to only retrieve entries which are
-                    // related to this entry.
-                    [ref.primaryKey]: arrayOfIds,
-                    ...where.where,
-                  }).where;
+                    // Where.
+                    queryOpts.query = strapi.utils.models.convertParams(name, {
+                      // Construct the "where" query to only retrieve entries which are
+                      // related to this entry.
+                      [ref.primaryKey]: arrayOfIds,
+                      ...where.where,
+                    }).where;
+                  }
                   break;
                   // falls through
                 }
@@ -424,14 +426,6 @@ module.exports = {
                     ...where.where,
                   }).where;
               }
-            }
-
-            if (queryOpts.hasOwnProperty('query') &&
-              queryOpts.query.hasOwnProperty('id') &&
-              queryOpts.query.id.hasOwnProperty('value') &&
-              Array.isArray(queryOpts.query.id.value)
-            ){
-              queryOpts.query.id.symbol = 'IN';
             }
 
             const value = await (association.model

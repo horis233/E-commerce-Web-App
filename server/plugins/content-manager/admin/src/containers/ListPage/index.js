@@ -390,11 +390,7 @@ export class ListPage extends React.Component {
 
   renderDropdown = item => {
     return (
-      <DropdownItem
-        key={item}
-        toggle={false}
-        onClick={() => this.handleChangeHeader({ target: { name: item } })}
-      >
+      <DropdownItem key={item}>
         <div>
           <InputCheckbox onChange={this.handleChangeHeader} name={item} value={this.isAttrInitiallyDisplayed(item)} />
         </div>
@@ -404,12 +400,18 @@ export class ListPage extends React.Component {
 
   renderDropdownHeader = msg => {
     return (
-      <DropdownItem onClick={this.handleResetDisplayedFields}>
+      <DropdownItem>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <span>
             {msg}
           </span>
-          <FormattedMessage id="content-manager.containers.Edit.reset" />
+          <FormattedMessage id="content-manager.containers.Edit.reset">
+            {m => (
+              <span onClick={this.handleResetDisplayedFields}>
+                {m}
+              </span>
+            )}
+          </FormattedMessage>
         </div>
       </DropdownItem>
     );

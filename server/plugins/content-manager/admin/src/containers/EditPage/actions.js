@@ -10,7 +10,6 @@ import { getValidationsFromForm } from 'utils/formValidations';
 import {
   ADD_RELATION_ITEM,
   CHANGE_DATA,
-  DELETE_DATA,
   GET_DATA,
   GET_DATA_SUCCEEDED,
   INIT_MODEL_PROPS,
@@ -40,12 +39,6 @@ export function changeData({ target }) {
     type: CHANGE_DATA,
     keys: target.name.split('.'),
     value: target.value,
-  };
-}
-
-export function deleteData() {
-  return {
-    type: DELETE_DATA,
   };
 }
 
