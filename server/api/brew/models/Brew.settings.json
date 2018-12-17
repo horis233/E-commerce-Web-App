@@ -3,7 +3,7 @@
   "collectionName": "",
   "info": {
     "name": "brew",
-    "description": "We are talking about beer here..."
+    "description": ""
   },
   "options": {
     "timestamps": true
@@ -29,8 +29,7 @@
     },
     "brand": {
       "model": "brand",
-      "via": "brews",
-      "dominant": true
+      "via": "brews"
     }
   }
 }

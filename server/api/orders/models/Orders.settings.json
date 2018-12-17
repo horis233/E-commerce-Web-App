@@ -11,8 +11,7 @@
   "attributes": {
     "address": {
       "default": "",
-      "type": "string",
-      "required": true
+      "type": "string"
     },
     "postalCode": {
       "default": "",
@@ -24,15 +23,13 @@
       "type": "string",
       "required": true
     },
-    "brews": {
-      "default": "",
-      "type": "json",
-      "required": true
-    },
     "amount": {
       "default": "",
-      "type": "decimal",
-      "required": true
+      "type": "decimal"
+    },
+    "brews": {
+      "default": "",
+      "type": "json"
     }
   }
 }
